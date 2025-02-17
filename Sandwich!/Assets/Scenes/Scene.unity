@@ -834,6 +834,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minimumDistance: 0.2
   maximumTime: 1
+  directionThreshold: 0.58
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
