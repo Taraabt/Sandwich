@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,9 +14,7 @@ public class InputManager : MonoBehaviour
 
     public static InputManager Instance;
 
-
     private InputSystem_Actions playerControls;
-    private Camera mainCamera;  
 
     private void Awake()
     {
@@ -31,7 +28,6 @@ public class InputManager : MonoBehaviour
         }
 
         playerControls = new InputSystem_Actions();
-        mainCamera= Camera.main;
     }
         
     private void OnEnable()
@@ -52,9 +48,8 @@ public class InputManager : MonoBehaviour
 
     private void StartTouchPrimary(InputAction.CallbackContext ctx)
     {
-
-        if (OnStartTouch != null) 
-            OnStartTouch(Utils.ScreenToWorld(mainCamera,playerControls.Touch.PrimaryPosition.ReadValue<Vector2>()),(float)ctx.startTime);
+        if (OnStartTouch != null)
+            OnStartTouch(playerControls.Touch.PrimaryPosition.ReadValue<Vector2>(),(float)ctx.startTime);
 
     }
 
@@ -62,13 +57,13 @@ public class InputManager : MonoBehaviour
     {
 
         if (OnEndTouch != null)
-            OnEndTouch(Utils.ScreenToWorld(mainCamera, playerControls.Touch.PrimaryPosition.ReadValue<Vector2>()), (float)ctx.time);
+            OnEndTouch(playerControls.Touch.PrimaryPosition.ReadValue<Vector2>(), (float)ctx.time);
 
     }
 
     public Vector2 PrimaryPosition()
     {
-        return Utils.ScreenToWorld(mainCamera, playerControls.Touch.PrimaryPosition.ReadValue<Vector2>());
+        return playerControls.Touch.PrimaryPosition.ReadValue<Vector2>();
     }
 
 
