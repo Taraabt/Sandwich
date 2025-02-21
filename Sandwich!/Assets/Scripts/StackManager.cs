@@ -12,7 +12,7 @@ public class StackManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(stack.Count);
+        //Debug.Log(stack.Count);
     }
 
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -91,19 +92,46 @@ public class SwipeDetection : MonoBehaviour
     public void Swipe(Vector3 dir,Vector2 point,Vector3 axis)
     {        
         Debug.DrawRay(dir, Vector3.down * 1f, Color.red, 5f);
-        //Transform parent = GetParent(hit.transform);
         if (Physics.Raycast(dir,Vector3.down,out hit2,1f,layerMask))
         {
             Transform parent =hit2.transform;
             Vector3 point3 = new Vector3(point.x, parent.transform.position.y * 2, point.y);
             Vector3 rotpoint = hit.transform.position + (point3 * 0.5f);
             hit.transform.RotateAround(rotpoint,axis,180);
-            hit.transform.SetParent(parent);
-            Debug.Log(parent.transform.position);
             Vector3 newPosition = parent.transform.position;
-            newPosition.y += (parent.transform.childCount) * 0.1f;
-            Debug.Log(parent.transform.childCount);
-            parent.transform.GetChild(0).position= newPosition;
+            newPosition.y += (parent.transform.childCount+1) * 0.1f;
+            hit.transform.position= newPosition;
+            InvertHierarchy(hit.transform,parent);
+        }
+    }
+
+    public void InvertHierarchy(Transform child,Transform parent)
+    {
+        List<Transform> children = new List<Transform>();
+        CancelChild(child, children);
+        if (children.Count > 0)
+        {
+            child.SetParent(children[0]);
+        }
+        for (int i = children.Count - 1; i >= 0; i--)
+        {
+            Transform currentChild = children[i];
+            currentChild.SetParent(child); 
+        }
+        parent.SetParent(children[0]);
+        parent.SetParent(child);
+    }
+
+    public void CancelChild(Transform parent,List<Transform> children)
+    {
+        if (parent.childCount==0)
+        {
+            children.Add(parent);
+            parent.SetParent(null);
+        }
+        else
+        {
+            CancelChild(parent.GetChild(0), children);
         }
     }
 
@@ -118,7 +146,5 @@ public class SwipeDetection : MonoBehaviour
         }
         return parentTransform;
     }
-
-
 
 }
