@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 
 public class SwipeDetection : MonoBehaviour
 {
+
+
     [SerializeField]
     private float minimumDistance = .2f;
     [SerializeField]
@@ -24,6 +26,8 @@ public class SwipeDetection : MonoBehaviour
     {
         inputManager = InputManager.Instance;
     }
+
+
 
     private void OnEnable()
     {
