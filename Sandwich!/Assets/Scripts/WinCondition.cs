@@ -15,7 +15,7 @@ public class WinCondition : MonoBehaviour
     }
     private void OnDisable()
     {
-        Turns += Win;
+        Turns -= Win;
     }
     public void Win(int turns)
     {
@@ -23,7 +23,6 @@ public class WinCondition : MonoBehaviour
         {
             GameUI.SetActive(false);
             WinScreen.SetActive(true);
-
         }
     }
 }
