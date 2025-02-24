@@ -1,0 +1,2 @@
+C:\Users\alber\OneDrive\Desktop\Programmazione\Progetti Git\Sandwich\Sandwich!\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\alber\OneDrive\Desktop\Programmazione\Progetti Git\Sandwich\Sandwich!\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

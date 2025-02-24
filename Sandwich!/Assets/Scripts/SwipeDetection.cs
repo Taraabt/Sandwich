@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class SwipeDetection : MonoBehaviour
 {
-
+    public static Action Win;
 
     [SerializeField]
     private float minimumDistance = .2f;
@@ -20,10 +20,12 @@ public class SwipeDetection : MonoBehaviour
     private float startTime;
     private Vector2 endPosition;
     private float endTime;
-    RaycastHit hit,hit2; 
+    RaycastHit hit,hit2;
+    [SerializeField]int move;
 
     private void Awake()
     {
+        move = 0;
         inputManager = InputManager.Instance;
     }
 
@@ -31,6 +33,7 @@ public class SwipeDetection : MonoBehaviour
 
     private void OnEnable()
     {
+
         inputManager.OnStartTouch += SwipeStart;
         inputManager.OnEndTouch += SwipeEnd;
     }
@@ -45,7 +48,7 @@ public class SwipeDetection : MonoBehaviour
     {
         Ray ray=Camera.main.ScreenPointToRay(position);
         Debug.DrawRay(ray.origin, ray.direction*10f,Color.red,5f);
-        if (Physics.Raycast(ray,out hit,10f,layerMask))
+        if (Physics.Raycast(ray,out hit,10f,1<<6))
         {
             startPosition = position;
             startTime = time;
@@ -98,6 +101,7 @@ public class SwipeDetection : MonoBehaviour
         Debug.DrawRay(dir, Vector3.down * 1f, Color.red, 5f);
         if (Physics.Raycast(dir,Vector3.down,out hit2,1f,layerMask))
         {
+            move++;
             Transform parent =hit2.transform;
             Vector3 point3 = new Vector3(point.x, parent.transform.position.y * 2, point.y);
             Vector3 rotpoint = hit.transform.position + (point3 * 0.5f);
@@ -106,10 +110,11 @@ public class SwipeDetection : MonoBehaviour
             newPosition.y += (parent.transform.childCount+1) * 0.1f;
             hit.transform.position= newPosition;
             InvertHierarchy(hit.transform,parent);
+            WinCondition.Turns(move);
         }
     }
 
-    public void InvertHierarchy(Transform child,Transform parent)
+    public void InvertHierarchy(Transform child, Transform parent)
     {
         List<Transform> children = new List<Transform>();
         CancelChild(child, children);
@@ -120,11 +125,12 @@ public class SwipeDetection : MonoBehaviour
         for (int i = children.Count - 1; i >= 0; i--)
         {
             Transform currentChild = children[i];
-            currentChild.SetParent(child); 
+            currentChild.SetParent(child);
         }
         parent.SetParent(children[0]);
         parent.SetParent(child);
     }
+
 
     public void CancelChild(Transform parent,List<Transform> children)
     {
@@ -137,18 +143,6 @@ public class SwipeDetection : MonoBehaviour
         {
             CancelChild(parent.GetChild(0), children);
         }
-    }
-
-    public Transform GetParent(Transform child)
-    {
-        Transform parentTransform = child;
-        while(parentTransform != null)
-        {
-            if (parentTransform.parent == null)
-                return parentTransform;
-            parentTransform = parentTransform.parent;
-        }
-        return parentTransform;
     }
 
 }
